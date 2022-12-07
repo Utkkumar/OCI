@@ -47,23 +47,23 @@ resource "oci_core_subnet" "my-test_subnet" {
     vcn_id = oci_core_vcn.my-test_vcn.id
 }
 
-resource "oci_core_instance" "test_instance" {
+#resource "oci_core_instance" "test_instance" {
     #Required
-    availability_domain = var.availability_domain
-    compartment_id = oci_identity_compartment.my-test_compartment.id
-    shape = "VM.Standard.E2.1.Micro"
-    source_details {
+    #availability_domain = var.availability_domain
+    #compartment_id = oci_identity_compartment.my-test_compartment.id
+    #shape = "VM.Standard.E2.1.Micro"
+    #source_details {
         #Required
-        source_id = oci_core_image.test_image.id
-        source_type = "image"
-}
-}
+        #source_id = oci_core_image.test_image.id
+        #source_type = "image"
+#}
+#}
 
-resource "oci_core_image" "test_image" {
+#resource "oci_core_image" "test_image" {
     #Required
-    compartment_id = oci_identity_compartment.my-test_compartment.id
-    instance_id = oci_core_instance.test_instance.id
-}
+    #compartment_id = oci_identity_compartment.my-test_compartment.id
+    #instance_id = oci_core_instance.test_instance.id
+#}
 
 #resource "oci_core_drg" "test_drg" {
     #Required
