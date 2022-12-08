@@ -14,25 +14,29 @@ provider "oci"  {
   region           = var.region
 }
 
+#Step-1 Create Root Compartment
+resource "oci_identity_compartment" "my-root_compartment" {
+    compartment_id = var.compartment_id
+    description = "This is a Root Compartment"
+    name = "My_Root_compartment"
+}
+
+#Step-2 Create Child Compartment
 resource "oci_identity_compartment" "my-test_compartment" {
     #Required
-    compartment_id = var.compartment_id
+    compartment_id = oci_identity_compartment.my-root_compartment.id
     description = "This compartment is for testing"
     name = "My_compartment"
 }
 
+#Step-3 Create DRG 
 resource "oci_core_drg" "my-test_drg" {
     #Required
     compartment_id = oci_identity_compartment.my-test_compartment.id
     display_name = var.drg_display_name
 }
 
-resource "oci_core_drg_attachment" "drg_to_vcn_attachment" {
-    #Required
-    drg_id = oci_core_drg.my-test_drg.id
-    vcn_id = oci_core_vcn.my-test_vcn.id
-}
-
+#Step-4 Create VCN
 resource "oci_core_vcn" "my-test_vcn" {
     #Required
     compartment_id = oci_identity_compartment.my-test_compartment.id
@@ -40,6 +44,14 @@ resource "oci_core_vcn" "my-test_vcn" {
     display_name = var.vcn_display_name
 }
 
+#Step-5 Connect VCN with DRG
+resource "oci_core_drg_attachment" "drg_to_vcn_attachment" {
+    #Required
+    drg_id = oci_core_drg.my-test_drg.id
+    vcn_id = oci_core_vcn.my-test_vcn.id
+}
+
+##Step-6 Create Subnet for VCN
 resource "oci_core_subnet" "my-test_subnet" {
     #Required
     cidr_block = var.subnet_cidr_block
@@ -69,5 +81,5 @@ resource "oci_core_subnet" "my-test_subnet" {
     #Required
     #compartment_id = var.compartment_id
 #}
-
+#}
 
